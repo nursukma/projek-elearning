@@ -16,6 +16,9 @@ class Siswa extends Model
     protected $dates = ['deleted_at'];
     protected $table = 'siswa';
 
+    protected $primaryKey = 'nis';
+    public $incrementing = false;
+
     protected $fillable = ['nis', 'nama_siswa', 'tlp_siswa', 'alamat_siswa', 'jk_siswa', 'id_kelas', 'id_user'];
 
     public function fkSiswaKelas(): BelongsTo

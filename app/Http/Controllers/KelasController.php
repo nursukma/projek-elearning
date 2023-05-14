@@ -12,7 +12,8 @@ class KelasController extends Controller
      */
     public function index()
     {
-        //
+        $data = Kelas::all();
+        return view('kelas.index', compact('data'));
     }
 
     /**
@@ -28,7 +29,16 @@ class KelasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'nama_kelas' => 'required|string|max:50'
+        ]);
+
+        $dataStore = Kelas::create($data);
+
+        if (!$dataStore) {
+            return back()->with('error', 'Gagal tambah data');
+        }
+        return back()->with('message', 'Berhasil tambah data');
     }
 
     /**
@@ -50,16 +60,31 @@ class KelasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Kelas $kelas)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'nama_kelas' => 'required|string|max:50'
+        ]);
+
+        $kelas = Kelas::find($id);
+        $kelas->nama_kelas = $data['nama_kelas'];
+        $dataUpdate = $kelas->save();
+
+        if (!$dataUpdate) {
+            return back()->with('error', 'Gagal ubah data');
+        }
+        return back()->with('message', 'Berhasil ubah data');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Kelas $kelas)
+    public function destroy($id)
     {
-        //
+        $kelas = Kelas::find($id);
+        $del = $kelas->delete();
+        if (!$del)
+            return back()->with('error', 'Gagal hapus data');
+        return back()->with('message', 'Berhasil hapus data');
     }
 }

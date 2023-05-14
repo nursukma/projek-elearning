@@ -22,4 +22,9 @@ class Kelas extends Model
     {
         return $this->hasMany(Siswa::class, 'id_kelas', 'id');
     }
+
+    // public function fkUjianKelas(): HasMany
+    // {
+    //     return $this->hasMany(Ujian::class, 'id_kelas', 'id');
+    // }
 }

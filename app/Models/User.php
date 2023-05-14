@@ -9,9 +9,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,8 +23,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
+        'username',
         'password',
+        'role',
+        'stts'
     ];
 
     /**
@@ -43,8 +48,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
+    protected $dates = ['deleted_at'];
+
     public function fkSiswaUser(): HasOne
     {
         return $this->hasOne(Siswa::class, 'id_user', 'id');
+    }
+
+    public function fkGuruUser(): HasOne
+    {
+        return $this->hasOne(Guru::class, 'id_users', 'id');
     }
 }

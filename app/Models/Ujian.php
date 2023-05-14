@@ -16,12 +16,25 @@ class Ujian extends Model
     protected $dates = ['deleted_at'];
     protected $table = 'ujian';
 
-    protected $fillable = ['id_ujian', 'kode_mapel', 'nama_ujian', 'waktu_ujian', 'nip'];
+    protected $primaryKey = 'id_ujian';
+    public $incrementing = false;
+
+    protected $fillable = ['id_ujian', 'kode_mapel', 'nama_ujian', 'waktu_mulai', 'waktu_akhir', 'nip'];
 
     public function fkUjianGuru(): BelongsTo
     {
         return $this->belongsTo(Guru::class, 'nip', 'nip');
     }
+
+    public function fkMapelUjian(): BelongsTo
+    {
+        return $this->belongsTo(Mapel::class, 'kode_mapel', 'kode_mapel');
+    }
+
+    // public function fkUjianKelas(): BelongsTo
+    // {
+    //     return $this->belongsTo(Kelas::class, 'id_kelas', 'id');
+    // }
 
     public function fkDetUjianUjian(): HasMany
     {

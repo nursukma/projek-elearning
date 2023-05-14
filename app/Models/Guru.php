@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Guru extends Model
@@ -15,8 +16,9 @@ class Guru extends Model
 
     protected $dates = ['deleted_at'];
     protected $table = 'guru';
+    protected $primaryKey = 'nip';
 
-    protected $fillable = ['nip', 'nama_guru', 'tlp_guru', 'alamat_guru', 'jk_guru', 'id_mapel'];
+    protected $fillable = ['nip', 'nama_guru', 'tlp_guru', 'alamat_guru', 'jk_guru', 'id_mapel', 'id_users'];
 
     public function fkMapelGuru(): BelongsTo
     {
@@ -26,5 +28,10 @@ class Guru extends Model
     public function fkUjianGuru(): HasMany
     {
         return $this->hasMany(Ujian::class, 'nip', 'nip');
+    }
+
+    public function fkGuruUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'id_users', 'id');
     }
 }

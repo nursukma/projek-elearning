@@ -15,10 +15,18 @@ class Mapel extends Model
     protected $dates = ['deleted_at'];
     protected $table = 'mapel';
 
+    protected $primaryKey = 'kode_mapel';
+    public $incrementing = false;
+
     protected $fillable = ['kode_mapel', 'nama_mapel'];
 
     public function fkMapelGuru(): HasMany
     {
         return $this->hasMany(Guru::class, 'id_mapel', 'kode_mapel');
+    }
+
+    public function fkMapelUjian(): HasMany
+    {
+        return $this->hasMany(Ujian::class, 'kode_mapel', 'kode_mapel');
     }
 }

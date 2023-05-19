@@ -33,6 +33,18 @@
     {{-- <link rel="stylesheet" href="assets/extensions/filepond/filepond.css" />
     <link rel="stylesheet" href="assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css" /> --}}
 
+    <style>
+        .my-popup-class .swal2-icon {
+            background: none !important;
+            font-size: 24px;
+        }
+
+        .my-popup-class .swal2-icon i {
+            position: relative;
+            top: 2px;
+        }
+    </style>
+
     @yield('page-style')
 </head>
 
@@ -150,6 +162,35 @@
             Toast.fire({
                 icon: 'warning',
                 title: "{{ session('warning') }}"
+            })
+        @endif
+    </script>
+    <script>
+        const Swal2 = Swal.mixin({
+            customClass: {
+                input: 'form-control'
+            }
+        })
+        @if (Session::has('stack-level'))
+            Swal2.fire({
+                icon: null,
+                // customClass: {
+                //     icon: "my-custom-icon-class",
+                // },
+                iconHtml: "<i class='bi bi-emoji-frown'></i>",
+                title: "Maaf",
+                text: "{{ session('stack-level') }}",
+            })
+        @endif
+        @if (Session::has('naik-level'))
+            Swal2.fire({
+                icon: null,
+                // customClass: {
+                //     popup: 'my-popup-class',
+                // },
+                iconHtml: "<i class='bi bi-emoji-sunglasses'></i>",
+                title: "Selamat",
+                text: "{{ session('naik-level') }}",
             })
         @endif
     </script>

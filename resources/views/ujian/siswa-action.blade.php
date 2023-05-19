@@ -39,7 +39,10 @@
                                 <h5 class="card-title">
                                     {{ $item->pertanyaan_ujian }}
                                 </h5>
-                                {{-- <img class="img-fluid w-100" src ="./assets/compiled/jpg/banana.jpg" alt="Card image cap" /> --}}
+                                @if ($item->lampiran)
+                                    <img class="img-fluid" style="width: 150px" height="120px"
+                                        src="{{ asset('/storage/ujian/lampiran/' . $item->lampiran) }}" alt="Lampiran" />
+                                @endif
                                 <p class="card-text">
                                 <fieldset>
                                     <label class="form-label">

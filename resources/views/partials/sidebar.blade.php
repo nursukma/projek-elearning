@@ -56,28 +56,28 @@
 
                     <li class="sidebar-item {{ request()->is('kelas') ? 'active' : '' }}">
                         <a href="/kelas" class="sidebar-link">
-                            <i class="bi bi-grid-fill"></i>
+                            <i class="bi bi-house-fill"></i>
                             <span>Kelas</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item {{ request()->is('mapel') ? 'active' : '' }}">
                         <a href="/mapel" class="sidebar-link">
-                            <i class="bi bi-grid-fill"></i>
+                            <i class="bi bi-book-half"></i>
                             <span>Mapel</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item {{ request()->is('guru') ? 'active' : '' }}">
                         <a href="/guru" class="sidebar-link">
-                            <i class="bi bi-grid-fill"></i>
+                            <i class="bi bi-person-fill"></i>
                             <span>Guru</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item {{ request()->is('siswa') ? 'active' : '' }}">
                         <a href="/siswa" class="sidebar-link">
-                            <i class="bi bi-grid-fill"></i>
+                            <i class="bi bi-people-fill"></i>
                             <span>Siswa</span>
                         </a>
                     </li>
@@ -95,7 +95,7 @@
                 <li
                     class="sidebar-item {{ request()->is('ujian*', 'detail-ujian*', 'daftar-ujian*', 'nilai-ujian*') ? 'active' : '' }} has-sub">
                     <a href="#" class="sidebar-link">
-                        <i class="bi bi-grid-fill"></i>
+                        <i class="bi bi-calendar2-fill"></i>
                         <span>Data Ujian</span>
                     </a>
 
@@ -121,7 +121,7 @@
                 <li class="sidebar-title">Setting</li>
                 <li class="sidebar-item {{ request()->is('profile') ? 'active' : '' }}">
                     <a href="/profile" class="sidebar-link">
-                        <i class="bi bi-grid-fill"></i>
+                        <i class="bi bi-gear-fill"></i>
                         <span>Profil</span>
                     </a>
                 </li>
@@ -129,7 +129,7 @@
                     <form id="logout" action="/logout" method="post">
                         @csrf
                         <a href="#" class="sidebar-link" onclick="myFunction()">
-                            <i class="bi bi-grid-fill"></i>
+                            <i class="bi bi-box-arrow-left"></i>
                             <span>Keluar</span>
                         </a>
                     </form>

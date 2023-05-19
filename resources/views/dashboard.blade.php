@@ -8,7 +8,7 @@
     </header>
 
     <div class="page-heading">
-        <h3>Halo, Admin </h3> <span class="text-subtitle text-muted">{{ auth()->user()->name }}</span>
+        <h3>Halo, {{ auth()->user()->role }} </h3> <span class="text-subtitle text-muted">{{ auth()->user()->name }}</span>
     </div>
     <div class="page-content">
         <section class="row">

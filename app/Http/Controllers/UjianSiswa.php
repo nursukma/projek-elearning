@@ -152,10 +152,10 @@ class UjianSiswa extends Controller
                     TemporaryNilai::where('id_user', '=', $id_user)->update(['soal' => $jmlData, 'betul' => $betul]);
                 }
 
-                return redirect('/daftar-ujian/pengerjaan/' . $id)->with('message', 'Selamat lanjut level');
+                return redirect('/daftar-ujian/pengerjaan/' . $id)->with('naik-level', 'Selamat lanjut level');
             } else {
                 // $this->level = 1;
-                return redirect('/daftar-ujian/pengerjaan/' . $id)->with('error', 'Maaf gagal lanjut level');
+                return redirect('/daftar-ujian/pengerjaan/' . $id)->with('stack-level', 'Maaf gagal lanjut level');
             }
         }
         // dd($this->level);

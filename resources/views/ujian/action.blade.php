@@ -94,11 +94,11 @@
                                     </div>
                                     @if ($action == 'add')
                                         <div class="col-md-6 col-12">
-                                            <div class="form-group">
+                                            <div class="form-group mandatory">
                                                 <label for="id_kelas">Kelas</label>
                                                 <select id="id_kelas" name="id_kelas[]"
                                                     class="choices form-select multiple-remove" multiple="multiple"
-                                                    {{ $action === 'add' ? 'data-parsley-required="true"' : '' }}>
+                                                    data-parsley-required="true">
                                                     @foreach ($kelas as $item)
                                                         <option value="{{ $item->id }}">{{ $item->nama_kelas }}
                                                         </option>

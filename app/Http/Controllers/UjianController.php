@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailUjian;
 use App\Models\Guru;
 use App\Models\Kelas;
 use App\Models\Mapel;
 use App\Models\Siswa;
 use App\Models\SubjekUjian;
+use App\Models\TemporaryFile;
 use App\Models\Ujian;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class UjianController extends Controller
@@ -24,7 +28,21 @@ class UjianController extends Controller
      */
     public function index()
     {
-        $data = Ujian::with('fkUjianGuru', 'fkMapelUjian')->get();
+        $id_user = auth()->user()->id;
+        $nip = Guru::select('nip')->where('id_users', $id_user)->first();
+
+        if (auth()->user()->role == 'Guru') {
+            $data = Ujian::with('fkUjianGuru', 'fkMapelUjian')->whereHas('fkUjianGuru', function (Builder $query) use ($id_user) {
+                $query->where('id_users', '=',  $id_user);
+            })->get();
+            // $data = DB::table('ujian')
+            //     ->join('guru', 'ujian.nip', '=', 'guru.nip')
+            //     ->join('mapel', 'ujian.kode_mapel', '=', 'mapel.kode_mapel')
+            //     ->where('guru.nip', $nip->nip)
+            //     ->get();
+        } else {
+            $data = Ujian::with('fkUjianGuru', 'fkMapelUjian')->get();
+        }
         $waktu_ujian = [];
         for ($i = 0; $i < count($data); $i++) {
             $waktu_mulai = $data[$i]->waktu_mulai;
@@ -76,7 +94,13 @@ class UjianController extends Controller
         $id_kelas = $request->id_kelas;
 
         $id_user = auth()->user()->id;
-        $guru = Guru::select('nip')->where('id_users', $id_user)->first();
+        $kode_mapel = $request->id_mapel;
+
+        if (auth()->user()->role === 'Guru') {
+            $guru = Guru::withTrashed()->select('nip')->where('id_users', $id_user)->first();
+        } else {
+            $guru = Guru::withTrashed()->select('nip')->where('id_mapel', $kode_mapel)->first();
+        }
 
         $waktu_ujian = explode(" to ", $request->waktu_ujian);
 
@@ -106,7 +130,6 @@ class UjianController extends Controller
             }
         };
         return redirect('/ujian')->with('message', 'Berhasil tambah data');
-        // dd($guru->nip);
     }
 
     /**
@@ -120,25 +143,70 @@ class UjianController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Ujian $ujian)
+    public function edit($id)
     {
         $action = 'edit';
-        return view('ujian.action', compact('action', 'ujian'));
+        $id_user = auth()->user()->id;
+
+        $ujian = Ujian::with('fkDetUjianUjian')->where('id_ujian', $id)->first();
+        $guru = Guru::select('nip')->where('id_users', $id_user)->first();
+
+        if (auth()->user()->role === 'Guru') {
+            $mapel = Mapel::with('fkMapelGuru')
+                ->whereHas('fkMapelGuru', function (Builder $query) use ($id_user) {
+                    $query->where('id_users', '=',  $id_user);
+                })
+                ->get()
+                ->toArray();
+        } else {
+            $mapel = Mapel::all();
+        }
+        // $ujian = DetailUjian::with('fkDetUjianUjian')->where('id_ujian', $id)->get();
+        return view('ujian.action', compact('action', 'ujian', "mapel"));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Ujian $ujian)
+    public function update(Request $request, $id)
     {
-        //
+        $ujian = Ujian::with('fkDetUjianUjian')->where('id_ujian', $id)->first();
+
+        if ($request->waktu_ujian != '') {
+            $waktu_ujian = explode(" to ", $request->waktu_ujian);
+            $ujian['waktu_mulai'] = $waktu_ujian[0];
+            $ujian['waktu_akhir'] = $waktu_ujian[1];
+        }
+
+        $ujian['nama_ujian'] = $request->nama_ujian;
+        $ujian['kode_mapel'] = $request->id_mapel;
+        $dataUp = $ujian->save();
+        if (!$dataUp)
+            return redirect('/ujian')->with('error', 'Gagal ubah data');
+
+        return redirect('/ujian')->with('message', 'Berhasil ubah data');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ujian $ujian)
+    public function destroy($id)
     {
-        //
+        $ujian = Ujian::where('id_ujian', $id)->first();
+        $det_ujian = DetailUjian::where('id_ujian', $id)->get(['id']);
+
+        $del1 = DetailUjian::destroy($det_ujian->toArray());;
+        if (!$del1)
+            return back()->with('error', 'Gagal menghapus data ujian');
+
+        $del = $ujian->delete();
+        if (!$del)
+            return back()->with('error', 'Gagal menghapus data ujian');
+
+        for ($i = 0; $i < count($det_ujian); $i++) {
+            Storage::deleteDirectory('ujian/lampiran/' . $det_ujian[$i]->lampiran);
+        }
+
+        return back()->with('message', 'Berhasil menghapus data ujian');
     }
 }

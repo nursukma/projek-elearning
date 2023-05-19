@@ -92,17 +92,30 @@
 
                 <li class="sidebar-title">Ujian</li>
 
-                <li class="sidebar-item has-sub">
+                <li
+                    class="sidebar-item {{ request()->is('ujian*', 'detail-ujian*', 'daftar-ujian*', 'nilai-ujian*') ? 'active' : '' }} has-sub">
                     <a href="#" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
                         <span>Data Ujian</span>
                     </a>
 
-                    <ul class="submenu">
-                        <li class="submenu-item {{ request()->is('ujian') ? 'active' : '' }}">
-                            <a href="/ujian" class="submenu-link">Bank Soal</a>
-                        </li>
-                    </ul>
+                    @if (auth()->user()->role === 'Siswa')
+                        <ul class="submenu">
+                            <li class="submenu-item {{ request()->is('daftar-ujian*') ? 'active' : '' }}">
+                                <a href="/daftar-ujian" class="submenu-link">Daftar Ujian</a>
+                            </li>
+                            <li class="submenu-item {{ request()->is('nilai-ujian*') ? 'active' : '' }}">
+                                <a href="{{ route('daftar-ujian.nilai', auth()->user()->id) }}"
+                                    class="submenu-link">Nilai Ujian</a>
+                            </li>
+                        </ul>
+                    @else
+                        <ul class="submenu">
+                            <li class="submenu-item {{ request()->is('ujian') ? 'active' : '' }}">
+                                <a href="/ujian" class="submenu-link">Bank Soal</a>
+                            </li>
+                        </ul>
+                    @endif
                 </li>
 
                 <li class="sidebar-title">Setting</li>

@@ -14,13 +14,16 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Data Ujian</h3>
+                    <h3><a href="{{ route('ujian.index') }}" class="text-info fw-bold">
+                            Data Ujian
+                        </a> {{ $det_nama->nama_ujian }}</h3>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="{{ route('ujian.create') }}" class="btn icon icon-left btn-success">
+                                <a href="{{ route('detail-ujian.add', $det_id->id_ujian) }}"
+                                    class="btn icon icon-left btn-success">
                                     <i data-feather="check-circle">
                                     </i> Tambah Data
                                 </a>
@@ -37,10 +40,11 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Ujian</th>
-                                <th>Mata Pelajaran</th>
-                                <th>Waktu Ujian</th>
-                                <th>Pengampu</th>
+                                <th>Pertanyaan Ujian</th>
+                                <th>Option Jawaban</th>
+                                <th>Jawaban Benar</th>
+                                <th>Lampiran</th>
+                                <th>level</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -48,30 +52,25 @@
                             @foreach ($data as $key => $item)
                                 <tr>
                                     <td>{{ $loop->iteration }} </td>
-                                    <td><a class="text-info fw-bold"
-                                            href="{{ route('detail-ujian.index', $item->id_ujian) }}">
-                                            {{ $item->nama_ujian }}
-                                        </a></td>
-                                    <td>{{ $item->fkMapelUjian->nama_mapel }}</td>
-                                    <td>{{ $waktu_ujian[$key] }} menit</td>
-                                    <td>{{ $item->fkUjianGuru->nama_guru }}</td>
+                                    <td>{{ $item->pertanyaan_ujian }}</td>
+                                    <td>{{ $item->option_ujian }}</td>
+                                    <td>{{ $item->jawaban_ujian }}</td>
+                                    <td>{{ $item->lampiran }}</td>
+                                    <td>{{ $item->level }}</td>
                                     <td>
-                                        {{-- <a href="{{ route('detail-ujian.add', $item->id_ujian) }}"
-                                            class="btn icon btn-success rounded-pill" title="Tambah Pertanyaan">
-                                            <i class="bi bi-plus-circle"></i>
-                                        </a> --}}
-                                        <a href="{{ route('ujian.edit', $item->id_ujian) }}"
+                                        {{-- <a href="{{ route('ujian.edit', $item->id_ujian) }}"
                                             class="btn icon btn-info rounded-pill" title="Edit">
                                             <i class="bi bi-pencil-square"></i>
-                                        </a>
+                                        </a> --}}
                                         <button type="button" class="btn icon btn-danger rounded-pill" title="Hapus Data"
                                             data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                            data-bs-act="{{ route('ujian.destroy', $item->id_ujian) }}"
+                                            data-bs-act="{{ route('detail-ujian.destroy', $item->id) }}"
                                             data-bs-nama="{{ $item->nama_ujian }}">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </td>
                                 </tr>
+                                {{-- @dd($item->option_ujian) --}}
                             @endforeach
                         </tbody>
                     </table>
@@ -97,13 +96,9 @@
                             <div>
                                 <br>
                             </div>
-                            <div class="text-center mb-2">
-                                Yakin untuk menghapus data ujian dengan nama ujian
-                                <strong class="badge border-danger border-1 text-danger" id="del_nama_ujian"> </strong>?
-                            </div>
-                            <div class="text-warning text-center" role="alert">
-                                <i class="bi bi-exclamation-octagon me-1"></i>
-                                <span class=""> Perhatian! semua data pertanyaan akan terhapus dari sistem.</span>
+                            <div class="text-center">
+                                Yakin untuk menghapus pertanyaan ujian?
+                                {{-- <strong class="badge border-danger border-1 text-danger" id="del_nama_ujian"> </strong>? --}}
                             </div>
                             <div><br></div>
                             <div class="modal-footer">
@@ -131,7 +126,7 @@
             const delButton = $(event.relatedTarget);
             const delForm = $('form#delete-form');
             delForm.attr('action', delButton.attr('data-bs-act'));
-            delForm.find('#del_nama_ujian').text('"' + delButton.attr('data-bs-nama') + '"')
+            // delForm.find('#del_nama_ujian').text('"' + delButton.attr('data-bs-nama') + '"')
         })
     </script>
 @endsection

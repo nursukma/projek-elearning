@@ -8,12 +8,12 @@
     </header>
 
     <div class="page-heading">
-        <h3>Contoh Dashboard</h3>
+        <h3>Halo, Admin </h3> <span class="text-subtitle text-muted">{{ auth()->user()->name }}</span>
     </div>
     <div class="page-content">
         <section class="row">
-            <div class="col-12 col-lg-9">
-                <div class="row">
+            <div class="col-12 col-lg-12">
+                {{-- <div class="row">
                     <div class="col-6 col-lg-3 col-md-6">
                         <div class="card">
                             <div class="card-body px-4 py-4-5">
@@ -96,9 +96,14 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
+                {{-- <div class="card">
+                    <div class="card-body">
+                        HALO
+                    </div>
+                </div> --}}
             </div>
-            <div class="col-12 col-lg-3">
+            {{-- <div class="col-12 col-lg-3">
                 <div class="card">
                     <div class="card-body py-4 px-4">
                         <div class="d-flex align-items-center">
@@ -151,7 +156,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </section>
     </div>
 @endsection

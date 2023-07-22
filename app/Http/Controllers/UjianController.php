@@ -41,7 +41,7 @@ class UjianController extends Controller
             //     ->where('guru.nip', $nip->nip)
             //     ->get();
         } else {
-            $data = Ujian::with('fkUjianGuru', 'fkMapelUjian')->get();
+            $data = Ujian::withTrashed()->with('fkUjianGuru', 'fkMapelUjian')->get();
         }
         $waktu_ujian = [];
         for ($i = 0; $i < count($data); $i++) {
@@ -52,7 +52,7 @@ class UjianController extends Controller
             $from = Carbon::createFromFormat('Y-m-d H:s:i', $waktu_akhir);
             $waktu_ujian[$i] = $to->diffInMinutes($from);
         }
-        // dd($waktu_ujian);
+        // dd($data);
         return view('ujian.index', compact('data', 'waktu_ujian'));
     }
 

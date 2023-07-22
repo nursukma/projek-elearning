@@ -29,4 +29,9 @@ class Mapel extends Model
     {
         return $this->hasMany(Ujian::class, 'kode_mapel', 'kode_mapel');
     }
+
+    public function fkMapelMatei(): HasMany
+    {
+        return $this->hasMany(Materi::class, 'kode_mapel', 'kode_mapel');
+    }
 }

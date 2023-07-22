@@ -87,7 +87,7 @@
                                         <div class="form-group">
                                             <label for="lampiran" class="form-label">Lampiran (file gambar)</label>
                                             <input type="file" class="image-preview-filepond" name="lampiran"
-                                                id="lampiran" data-max-file-size="1MB" multiple />
+                                                id="lampiran" data-max-file-size="1MB" />
                                         </div>
                                     </div>
                                     <div class="col-12 d-flex justify-content-start">
@@ -128,6 +128,7 @@
     </script>
     <script>
         const pond = FilePond.create(document.querySelector(".image-preview-filepond"), {
+            allowMultiple: false,
             credits: null,
             allowImagePreview: true,
             allowImageFilter: false,
@@ -162,5 +163,4 @@
             }
         })
     </script>
-    <script></script>
 @endsection

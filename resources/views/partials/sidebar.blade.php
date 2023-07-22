@@ -68,6 +68,39 @@
                         </a>
                     </li>
 
+                    <li class="sidebar-item {{ request()->is('materi') ? 'active' : '' }}">
+                        <a href="/materi" class="sidebar-link">
+                            <i class="bi bi-file-fill"></i>
+                            <span>Materi</span>
+                        </a>
+                    </li>
+
+                    <li
+                        class="sidebar-item {{ request()->is('ujian*', 'detail-ujian*', 'daftar-ujian*', 'nilai-ujian*') ? 'active' : '' }} has-sub">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-calendar2-fill"></i>
+                            <span>Data Ujian</span>
+                        </a>
+
+                        @if (auth()->user()->role === 'Siswa')
+                            <ul class="submenu">
+                                <li class="submenu-item {{ request()->is('daftar-ujian*') ? 'active' : '' }}">
+                                    <a href="/daftar-ujian" class="submenu-link">Daftar Ujian</a>
+                                </li>
+                                <li class="submenu-item {{ request()->is('nilai-ujian*') ? 'active' : '' }}">
+                                    <a href="{{ route('daftar-ujian.nilai', auth()->user()->id) }}"
+                                        class="submenu-link">Nilai Ujian</a>
+                                </li>
+                            </ul>
+                        @else
+                            <ul class="submenu">
+                                <li class="submenu-item {{ request()->is('ujian') ? 'active' : '' }}">
+                                    <a href="/ujian" class="submenu-link">Bank Soal</a>
+                                </li>
+                            </ul>
+                        @endif
+                    </li>
+
                     <li class="sidebar-item {{ request()->is('guru') ? 'active' : '' }}">
                         <a href="/guru" class="sidebar-link">
                             <i class="bi bi-person-fill"></i>
@@ -90,16 +123,59 @@
                     </li>
                 @endif
 
-                <li class="sidebar-title">Ujian</li>
+                @if (auth()->user()->role == 'Guru')
+                    <li class="sidebar-title">Menu</li>
 
-                <li
-                    class="sidebar-item {{ request()->is('ujian*', 'detail-ujian*', 'daftar-ujian*', 'nilai-ujian*') ? 'active' : '' }} has-sub">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-calendar2-fill"></i>
-                        <span>Data Ujian</span>
-                    </a>
+                    <li class="sidebar-item {{ request()->is('materi') ? 'active' : '' }}">
+                        <a href="/materi" class="sidebar-link">
+                            <i class="bi bi-file-fill"></i>
+                            <span>Materi</span>
+                        </a>
+                    </li>
+                    <li
+                        class="sidebar-item {{ request()->is('ujian*', 'detail-ujian*', 'daftar-ujian*', 'nilai-ujian*') ? 'active' : '' }} has-sub">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-calendar2-fill"></i>
+                            <span>Data Ujian</span>
+                        </a>
 
-                    @if (auth()->user()->role === 'Siswa')
+                        @if (auth()->user()->role === 'Siswa')
+                            <ul class="submenu">
+                                <li class="submenu-item {{ request()->is('daftar-ujian*') ? 'active' : '' }}">
+                                    <a href="/daftar-ujian" class="submenu-link">Daftar Ujian</a>
+                                </li>
+                                <li class="submenu-item {{ request()->is('nilai-ujian*') ? 'active' : '' }}">
+                                    <a href="{{ route('daftar-ujian.nilai', auth()->user()->id) }}"
+                                        class="submenu-link">Nilai Ujian</a>
+                                </li>
+                            </ul>
+                        @else
+                            <ul class="submenu">
+                                <li class="submenu-item {{ request()->is('ujian') ? 'active' : '' }}">
+                                    <a href="/ujian" class="submenu-link">Bank Soal</a>
+                                </li>
+                            </ul>
+                        @endif
+                    </li>
+                @endif
+
+                @if (auth()->user()->role === 'Siswa')
+                    <li class="sidebar-title">Menu</li>
+
+                    <li class="sidebar-item {{ request()->is('materi-siswa') ? 'active' : '' }}">
+                        <a href="/materi-siswa" class="sidebar-link">
+                            <i class="bi bi-file-fill"></i>
+                            <span>Materi</span>
+                        </a>
+                    </li>
+
+                    <li
+                        class="sidebar-item {{ request()->is('daftar-ujian*', 'nilai-ujian*') ? 'active' : '' }} has-sub">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-calendar2-fill"></i>
+                            <span>Data Ujian</span>
+                        </a>
+
                         <ul class="submenu">
                             <li class="submenu-item {{ request()->is('daftar-ujian*') ? 'active' : '' }}">
                                 <a href="/daftar-ujian" class="submenu-link">Daftar Ujian</a>
@@ -109,14 +185,8 @@
                                     class="submenu-link">Nilai Ujian</a>
                             </li>
                         </ul>
-                    @else
-                        <ul class="submenu">
-                            <li class="submenu-item {{ request()->is('ujian') ? 'active' : '' }}">
-                                <a href="/ujian" class="submenu-link">Bank Soal</a>
-                            </li>
-                        </ul>
-                    @endif
-                </li>
+                    </li>
+                @endif
 
                 <li class="sidebar-title">Setting</li>
                 <li class="sidebar-item {{ request()->is('profile') ? 'active' : '' }}">

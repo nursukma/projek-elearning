@@ -5,6 +5,8 @@ use App\Http\Controllers\GuruController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MapelController;
+use App\Http\Controllers\MateriController;
+use App\Http\Controllers\MateriSiswa;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\UjianController;
 use App\Http\Controllers\UjianSiswa;
@@ -74,14 +76,19 @@ Route::group(
             ['middleware' => ['role:Guru|Admin']],
             function () {
                 Route::resource('ujian', UjianController::class);
+                Route::resource('materi', MateriController::class);
                 Route::resource('detail-ujian', DetailUjianController::class);
                 Route::get('detail-ujian/create/{id}', [DetailUjianController::class, 'add'])->name('detail-ujian.add');
                 Route::get('detail-ujian/index/{id}', [DetailUjianController::class, 'index'])->name('detail-ujian.index');
                 Route::post('detail-ujian/store/{id}', [DetailUjianController::class, 'add'])->name('detail-ujian.save');
 
-                // File Uploader with filepond js
+                // File Uploader with filepond js -- UJIAN
                 Route::post('/tmp-upload',  [DetailUjianController::class, 'tmpUpload']);
                 Route::delete('/tmp-delete',  [DetailUjianController::class, 'tmpDelete']);
+
+                // File Uploader with filepond js -- MATERI
+                Route::post('/tmp-upload-materi',  [MateriController::class, 'tmpUpload']);
+                Route::delete('/tmp-delete-materi',  [MateriController::class, 'tmpDelete']);
             }
         );
 
@@ -89,10 +96,15 @@ Route::group(
         Route::group(
             ['middleware' => ['role:Siswa']],
             function () {
+                // Ujian
                 Route::get('daftar-ujian', [UjianSiswa::class, 'index'])->name('daftar-ujian.index');
                 Route::get('daftar-ujian/pengerjaan/{id}', [UjianSiswa::class, 'create'])->name('daftar-ujian.create');
                 Route::post('daftar-ujian/pengerjaan/{id}', [UjianSiswa::class, 'store'])->name('daftar-ujian.store');
                 Route::get('nilai-ujian/{id}', [UjianSiswa::class, 'showNilai'])->name('daftar-ujian.nilai');
+
+                // Materi
+                Route::get('materi-siswa', [MateriSiswa::class, 'index'])->name('materi-siswa.index');
+                Route::post('materi-siswa/download/{file}', [MateriSiswa::class, 'downloadPDF'])->name('materi-siswa.download');
             }
         );
     }

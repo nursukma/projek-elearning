@@ -81,7 +81,7 @@
                                         <div class="form-group">
                                             <label for="lampiran" class="form-label">Berkas</label>
                                             <a class="sidebar-link" title="Unduh" id="berkas">
-                                                <i class="bi bi-file-earmark-pdf-fill"></i>
+                                                <i class="bi bi-file-earmark-pdf-fill"></i>Unduh
                                             </a>
                                         </div>
                                     </div>
@@ -103,17 +103,26 @@
 
             var linkDownload = updateButton.attr('data-bs-berkas');
             const btnDownload = updateForm.find('#berkas');
+            var encodedFile = encodeURIComponent(linkDownload);
 
             // updateForm.attr('action', updateButton.attr('data-bs-act'));
             updateForm.find('#deskripsi').val(updateButton.attr('data-bs-deskripsi'));
             updateForm.find('#id_mapel').val(updateButton.attr('data-bs-mapel'));
 
-            btnDownload.click(function() {
-                var url = "{{ route('materi-siswa.download', ':file') }}";
-                url = url.replace(':file', linkDownload);
+            // Split the filepath into folder and filename
+            var parts = linkDownload.split('/');
+            var folder = parts[0];
+            var filename = parts[1];
 
+            // Prepare the URL for the download route
+            var url = "{{ route('materi-siswa.download', ['folder' => ':folder', 'filename' => ':filename']) }}"
+                .replace(':folder', folder)
+                .replace(':filename', filename);
+
+            btnDownload.click(function(e) {
+                e.preventDefault();
                 $.ajax({
-                    type: 'POST',
+                    type: 'GET',
                     url: url,
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'

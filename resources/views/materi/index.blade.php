@@ -102,8 +102,11 @@
                                                     @endforeach
                                                 </select>
                                             @else
-                                                <input type="text" id="id_mapel" class="form-control"
-                                                    value="{{ $guru->fkMapelGuru->nama_mapel }}" name="id_mapel"
+                                                <input type="text" id="nama_mapel" class="form-control"
+                                                    value="{{ $guru->fkMapelGuru->nama_mapel }}" name="nama_mapel"
+                                                    data-parsley-required="true" readonly />
+                                                <input type="hidden" id="id_mapel" class="form-control"
+                                                    value="{{ $guru->fkMapelGuru->kode_mapel }}" name="id_mapel"
                                                     data-parsley-required="true" readonly />
                                             @endif
                                         </div>

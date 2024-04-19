@@ -81,6 +81,7 @@ Route::group(
                 Route::get('detail-ujian/create/{id}', [DetailUjianController::class, 'add'])->name('detail-ujian.add');
                 Route::get('detail-ujian/index/{id}', [DetailUjianController::class, 'index'])->name('detail-ujian.index');
                 Route::post('detail-ujian/store/{id}', [DetailUjianController::class, 'add'])->name('detail-ujian.save');
+                Route::get('guru-ujian/{id}', [UjianController::class, 'showNilai'])->name('guru-ujian.nilai');
 
                 // File Uploader with filepond js -- UJIAN
                 Route::post('/tmp-upload',  [DetailUjianController::class, 'tmpUpload']);
@@ -104,7 +105,7 @@ Route::group(
 
                 // Materi
                 Route::get('materi-siswa', [MateriSiswa::class, 'index'])->name('materi-siswa.index');
-                Route::post('materi-siswa/download/{file}', [MateriSiswa::class, 'downloadPDF'])->name('materi-siswa.download');
+                Route::get('materi-siswa/download/{folder}/{filename}', [MateriSiswa::class, 'downloadPDF'])->name('materi-siswa.download');
             }
         );
     }

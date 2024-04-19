@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use ZipArchive;
 
 class MateriSiswa extends Controller
 {
@@ -17,30 +18,19 @@ class MateriSiswa extends Controller
         return view('materi.siswa-index', compact('data'));
     }
 
-    public function downloadPDF($file)
+    public function downloadPDF($folder, $filename)
     {
-        $filePath = public_path('storage/materi/lampiran/' . $file);
+        $filePath = "materi/lampiran/{$folder}/{$filename}";
         $headers = [
             'Content-Type' => 'application/pdf',
         ];
 
-        $files = scandir($filePath);
+        if (Storage::exists($filePath)) {
+            $mime_type = Storage::mimeType($filePath);
 
-        // Filter out "." and ".." directories from the list
-        $files = array_diff($files, ['.', '..']);
-
-        // $files sekarang berisi daftar nama file dalam direktori yang ditentukan
-        foreach ($files as $file1) {
-            $dir = $filePath . '/' . $file1;
-            $mime_type = File::mimeType($dir);
-
-            // Generate the response to open the file in a new blank tab or window
-            $response = Response::make(file_get_contents($dir), 200);
-            $response->header('Content-Type', $mime_type);
-            $response->header('Content-Disposition', 'inline; filename="' . $file1 . '"');
-            return $response;
-            // return Storage::download($file1, $dir, $headers);
-            // return Response::download($dir, $file1, $headers);
+            return response()->download(storage_path("app/public/{$filePath}"), $filename, ['Content-Type' => $mime_type]);
+        } else {
+            return abort(404);
         }
     }
 }

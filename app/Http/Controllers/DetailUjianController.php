@@ -64,7 +64,7 @@ class DetailUjianController extends Controller
                 'option_ujian' => $option_jawaban,
                 'jawaban_ujian' => $request->jawaban_ujian,
                 'level' => $request->level,
-                'lampiran' => '',
+                'lampiran' => null,
             ]);
         }
 

@@ -154,6 +154,10 @@
                                 <li class="submenu-item {{ request()->is('ujian') ? 'active' : '' }}">
                                     <a href="/ujian" class="submenu-link">Bank Soal</a>
                                 </li>
+                                <li class="submenu-item {{ request()->is('nilai-ujian*') ? 'active' : '' }}">
+                                    <a href="{{ route('guru-ujian.nilai', auth()->user()->id) }}"
+                                        class="submenu-link">Nilai Ujian</a>
+                                </li>
                             </ul>
                         @endif
                     </li>

@@ -34,7 +34,7 @@ class UjianController extends Controller
         if (auth()->user()->role == 'Guru') {
             $data = Ujian::with('fkUjianGuru', 'fkMapelUjian')->whereHas('fkUjianGuru', function (Builder $query) use ($id_user) {
                 $query->where('id_users', '=',  $id_user);
-            })->get();
+            })->orderBy('created_at', 'desc')->get();
             // $data = DB::table('ujian')
             //     ->join('guru', 'ujian.nip', '=', 'guru.nip')
             //     ->join('mapel', 'ujian.kode_mapel', '=', 'mapel.kode_mapel')
@@ -76,14 +76,16 @@ class UjianController extends Controller
                 })
                 ->get()
                 ->toArray();
+            $nip =  Guru::select('nip')->where('id_users', $id_user)->first();
         } else {
             $mapel = Mapel::all();
+            $nip = 0;
         }
 
         $kelas = Kelas::all();
 
         // dd($mapel);
-        return view('ujian.action', compact('action', 'kelas', 'mapel', 'id_ujian'));
+        return view('ujian.action', compact('action', 'kelas', 'mapel', 'id_ujian', 'nip'));
     }
 
     /**
@@ -97,9 +99,9 @@ class UjianController extends Controller
         $kode_mapel = $request->id_mapel;
 
         if (auth()->user()->role === 'Guru') {
-            $guru = Guru::withTrashed()->select('nip')->where('id_users', $id_user)->first();
+            $guru = Guru::withTrashed()->select('nip')->where('id_users', $id_user)->whereNull('deleted_at')->first();
         } else {
-            $guru = Guru::withTrashed()->select('nip')->where('id_mapel', $kode_mapel)->first();
+            $guru = Guru::withTrashed()->select('nip')->where('id_mapel', $kode_mapel)->whereNull('deleted_at')->first();
         }
 
         $waktu_ujian = explode(" to ", $request->waktu_ujian);
@@ -208,5 +210,25 @@ class UjianController extends Controller
         }
 
         return back()->with('message', 'Berhasil menghapus data ujian');
+    }
+
+    public function showNilai($id)
+    {
+        // $id = auth()->user()->id;
+        $guru = Guru::where('id_users', $id)->first();
+        $nip = $guru->nip;
+
+        // $subjek_ujian = SubjekUjian::where('nis_peserta', $nis_peserta)->get();
+        $data = DB::table('subjek_ujian')
+            ->join('ujian', 'ujian.id_ujian', '=', 'subjek_ujian.no_ujian')
+            ->join('mapel', 'ujian.kode_mapel', '=', 'mapel.kode_mapel')
+            ->join('siswa', 'subjek_ujian.nis_peserta', '=', 'siswa.nis')
+            ->select('mapel.nama_mapel', 'mapel.kode_mapel', 'subjek_ujian.*', 'ujian.nama_ujian', 'siswa.nama_siswa')
+            ->where('ujian.nip', $nip)
+            ->where('ujian.deleted_at', '=', null)
+            ->get();
+
+        // dd($data);
+        return view('ujian.guru-nilai', compact('data'));
     }
 }

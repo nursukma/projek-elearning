@@ -55,7 +55,7 @@ class MateriController extends Controller
 
         $dataStore = Materi::create([
             'kode_mapel' => $data['id_mapel'],
-            'berkas' => $data['lampiran'],
+            'berkas' => $data['lampiran'] . '/' . $temp_file['file'],
             'deskripsi' => $data['deskripsi'],
         ]);
 
@@ -67,7 +67,7 @@ class MateriController extends Controller
         Storage::deleteDirectory('materi/tmp/' . $temp_file->folder);
         $temp_file->delete();
 
-        return back()->with('message', 'Berhasil tambah data');
+        return back()->with('message', 'Berhasil tambah data'); 
     }
 
     /**
@@ -133,7 +133,8 @@ class MateriController extends Controller
     {
         if ($request->hasFile('lampiran')) {
             $image = $request->file('lampiran');
-            $file_name = $image->getClientOriginalName();
+            $original = $image->getClientOriginalName();
+            $file_name = str_replace(' ', '', $original);
 
             $folder = uniqid('materi', true);
             // $image->storeAs('ujian/tmp', $folder);

@@ -36,7 +36,8 @@
                             @endif
                             <div class="form-body">
                                 <div class="row">
-                                    <div class="col-md-12 col-12">
+                                    <div
+                                        class="{{ auth()->user()->role === 'Guru' ? 'col-md-6 col-12' : 'col-md-12 col-12' }}">
                                         <div class="form-group">
                                             <label for="id_ujian">Id Ujian</label>
                                             <input type="text" id="id_ujian" class="form-control"
@@ -44,9 +45,19 @@
                                                 name="id_ujian" readonly />
                                         </div>
                                     </div>
+                                    @if (auth()->user()->role === 'Guru')
+                                        <div class="col-md-6 col-12" hidden>
+                                            <div class="form-group">
+                                                <label for="nip">NIP</label>
+                                                <input type="text" id="nip" class="form-control"
+                                                    value="{{ $action === 'add' ? $nip->nip : $nip->nip }}" name="id_ujian"
+                                                    readonly />
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
-                                            <label for="nama_ujian">Nama Ujian</label>
+                                            <label for="nama_ujian" class="form-label">Nama Ujian</label>
                                             <input type="text" id="nama_ujian" class="form-control"
                                                 placeholder="cth: UAS" name="nama_ujian"
                                                 value="{{ $action === 'add' ? '' : $ujian->nama_ujian }}"
